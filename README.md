@@ -3,14 +3,15 @@
 Dr. Physio Clinic Website
 Welcome to the Dr. Physio Clinic website! This repository contains the source code for our clinic's website, where patients can learn about our services, read testimonials, and contact us for appointments or inquiries.
 
-Table of Contents
-Overview
-Features
-Technologies Used
-Setup
-Usage
-Contributing
-License
+Table of Contents<br>
+Overview<br>
+Features<br>
+Technologies Used<br>
+Setup<br>
+Usage<br>
+Contributing<br>
+License<br>
+
 Overview
 Our website provides information about our clinic, including details about our services, testimonials from satisfied patients, information about our team, and a contact form for scheduling appointments or reaching out for inquiries.
 
