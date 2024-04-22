@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/assets/logo fav.png">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+    <header>
+        <!-- Include the header -->
+        <%- include('../components/header') %>
+    </header>
+    <div class="contact__container">
+      <span class="big-circle"></span>
+      <img src="img/shape.png" class="square" alt="" />
+      <div class="contact__form">
+        <div class="contact-info">
+          <h3 class="contact__title">Let's get in touch</h3>
+          <p class="contact__text">
+            Whether you have inquiries, feedback, or just want to say hello, we're here and eager 
+            to hear from you. Feel free to explore our contact details below and let's start a conversation
+          </p>
+
+          <div class="info">
+            <div class="information">
+              <p><i class="ri-map-pin-2-fill"></i> #5, Ebenezer Enclave, Patel Ramaiah Garden, Kothanur, Bangalore, KA - 560077</p>        
+            </div>
+            <div class="information">
+              <p><i class="ri-mail-fill"></i> support@drphysioclinic.com</p>
+            </div>
+            <div class="information">
+              <p><i class="ri-phone-fill"></i> (+91) 72042 34774</p>
+            </div>
+          </div>
+
+          <div class="social-media">
+            <p>Connect with us :</p>
+            <div class="social-icons">
+              <a href="#">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <span class="circle one"></span>
+          <span class="circle two"></span>
+
+          <form action="/submit_contact" method="post">
+            <h3 class="contact__title">Contact us</h3>
+            <div class="input-container">
+              <input type="contact__text" name="name" placeholder="Full Name" class="contact__input" />
+              <span>Username</span>
+            </div>
+            <div class="input-container">
+              <input type="email" name="email" placeholder="Email" class="contact__input" />
+              <span>Email</span>
+            </div>
+            <div class="input-container">
+              <input type="tel" name="phone" placeholder="Phone Number" class="contact__input" />
+              <span>Phone</span>
+            </div>
+            <div class="input-container textarea">
+              <textarea name="message" placeholder="Message" class="contact__input"></textarea>
+              <span>Message</span>
+            </div>
+            <input type="submit" value="Send" class="contact__btn" />
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section__header" style="text-align: center;">Where <b style="color: #fb923c"> We</b> Are Located !</h2>
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124371.67267482266!2d77.4953567972656!3d13.060175300000013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1976397103c5%3A0xa6ab3b490d737bd!2sDr%20Physio%20clinic(therapeutic%20sports%20massage%20)!5e0!3m2!1sen!2sin!4v1712745066122!5m2!1sen!2sin" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>  
+
+    <script src="../app.js"></script>
+    <footer>
+        <!-- Include the footer -->
+        <%- include('../components/footer') %>
+    </footer>
+
+</body>
+</html>

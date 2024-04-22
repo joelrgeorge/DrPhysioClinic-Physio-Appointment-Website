@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="assets/logo fav.png">
+    <link rel="stylesheet" href="styles.css" />
+    <title>Dr. Physio Clinic</title>
+    <header>
+      <nav class="section__container nav__container">
+        <div class="nav__logo">
+          <a href="/"><img src="/assets/logo.png" alt="HealthCare Logo"></a>
+        </div>
+        <ul class="nav__links"> 
+          <li class="link"><a href="/">Home</a></li>
+          <li class="link"><a href="/about">About Us</a></li>
+          <li class="link"><a href="/services">Services</a></li>
+          <li class="link"><a href="/testimonials">Testimonials</a></li>
+        </ul>
+        <button id="toggleMenuBtn" class="btn toggle-menu-btn">Menu</button>
+        <button class="btn contact-us-btn">
+          <a href="/contact" style="color: aliceblue;">Contact Us</a>
+        </button>
+      </nav>
+      <ul id="mobileMenu" class="mobile-menu">
+        <li class="link"><a href="/">Home</a></li>
+        <li class="link"><a href="/about">About Us</a></li>
+        <li class="link"><a href="/services">Services</a></li>
+        <li class="link"><a href="/testimonials">Testimonials</a></li>
+      </ul>
+    </header>
+  </head>
+  <body>
+      <div class="section__container header__container" style="background-image: url('../assets/02.jpg'); background-size: cover; overflow: visible";>
+        <div class="header__content">
+          <h1>Providing an Exceptional Patient Experience</h1>
+          <p>
+            Welcome, where exceptional patient experiences are our priority.
+            With compassionate care, state-of-the-art facilities, and a
+            patient-centered approach, we're dedicated to your well-being. Trust
+            us with your health and experience the difference.
+          </p>
+          <button class="serve_btn";><a href="/services" style="color: aliceblue";>See Services</a></button>
+        </div>
+        <div class="header__form">
+          <form action="/submit_form" method="post">
+            <h4>Book Appointment</h4>
+            <input type="text" name="firstName" placeholder="First Name" />
+            <input type="text" name="lastName" placeholder="Last Name" />
+            <input type="text" name="address" placeholder="Address" />
+            <input type="text" name="phoneNumber" placeholder="Phone No." />
+            <button class="btn form__btn" type="submit">Book Appointment</button>
+        </form>        
+        </div>
+      </div>
+
+    <section class="section__container service__container">
+      <div class="service__header">
+        <div class="service__header__content">
+          <h2 class="section__header" style= "font-size: 24px;"><b style="color: #fb923c;">Our</b> Special service</h2>
+          <p>
+            Beyond simply providing medical care, our commitment lies in
+            delivering unparalleled service tailored to your unique needs.
+          </p>
+        </div>
+        <button class="service__btn">Ask A Service</button>
+      </div>
+      <div class="service__grid">
+        <div class="service__card">
+          <span><i class="ri-body-scan-line"></i></span>
+          <h4>Orthopedic Rehabilitation</h4>
+          <p>
+             Programs focused on improving musculoskeletal<br> conditions
+             such as back pain, arthritis,<br> or neck pain.
+          </p>
+        </div>
+        <div class="service__card">
+          <span><i class="ri-health-book-line"></i></span>
+          <h4>Home Exercise Programs</h4>
+          <p>
+            Personalized exercise routines and instructions for patients to
+            continue their rehabilitation at home.
+          </p>
+        </div>
+        <div class="service__card">
+          <span><i class="ri-empathize-line"></i></span>
+          <h4>Pain Management</h4>
+          <p>
+            Techniques such as ultrasound therapy, electrical stimulation, hot
+            or cold therapy, and massage to alleviate pain and discomfort.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="section__container about__container">
+      <div class="about__content">
+        <h2 class="section__header">About <b style="color: #fb923c"> Us</b></h2>
+        <p>
+          Welcome to our healthcare website, your one-stop destination for
+          reliable and comprehensive health care information. We are committed
+          to promoting wellness and providing valuable resources to empower you
+          on your health journey.
+        </p>
+        <p>
+          Explore our extensive collection of expertly written articles and
+          guides covering a wide range of health topics. From understanding
+          common medical conditions to tips for maintaining a healthy lifestyle,
+          our content is designed to educate, inspire, and support you in making
+          informed choices for your health.
+        </p>
+        <p>
+          Discover practical health tips and lifestyle advice to optimize your
+          physical and mental well-being. We believe that small changes can lead
+          to significant improvements in your quality of life, and we're here to
+          guide you on your path to a healthier and happier you.
+        </p>
+      </div>
+      <div class="about__image">
+        <img src="assets/03.jpg" alt="about" />
+      </div>
+    </section>
+
+    <section class="section__container why__container">
+      <div class="why__image">
+        <img src="assets/04.jpg" alt="why choose Us" />
+      </div>
+      <div class="why__content">
+        <h2 class="section__header">Why Choose <b style="color: #fb923c"> Us</b></h2>
+        <p>
+          With a steadfast commitment to your well-being, our team of highly
+          trained healthcare professionals ensures that you receive nothing
+          short of exceptional patient experiences.
+        </p>
+        <div class="why__grid">
+          <span><i class="ri-psychotherapy-line"></i></span>
+          <div>
+            <h4>Physical Therapy Sessions</h4>
+            <p>
+              These involve exercises, stretches, and manual therapy techniques
+              to improve mobility, strength, and flexibility, tailored to the
+              individual's needs.
+            </p>
+          </div>
+          <span><i class="ri-first-aid-kit-line"></i></span>
+          <div>
+            <h4>Post-Injury Rehabilitation</h4>
+            <p>
+               Comprehensive programs designed to help individuals recover from
+               injuries, surgeries, or medical conditions such as fractures
+               joint replacements, or strokes.
+            </p>
+          </div>
+          <span><i class="ri-presentation-line"></i></span>
+          <div>
+            <h4>Preventive Care and Education</h4>
+            <p>
+              Guidance on posture correction, ergonomic techniques, and injury
+              prevention strategies to promote long-term health and wellness.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <h2 class="section__header" style="text-align: center; margin-top: 50px;"><b style="color: #fb923c"> Our</b> Infastructure</h2>
+    <h2 class="section__header" style= "font-family: Caveat, cursive; color: #fb923c; text-align: center; margin-bottom: 50px;">Top Of The Line Equpments</h2>
+    <div class="gallery-container">
+      <div class="gallery__image">
+        <img src="/assets/27.jpg" alt="Image 1">
+      </div>
+      <div class="gallery__image">
+        <img src="/assets/26.jpg" alt="Image 2">
+      </div>
+      <div class="gallery__image">
+        <img src="/assets/28.jpg" alt="Image 3">
+      </div>
+      <div class="gallery__image">
+        <img src="/assets/31.jpg" alt="Image 4">
+      </div>
+      <div class="gallery__image">
+        <img src="/assets/30.jpg" alt="Image 5">
+      </div>
+      <div class="gallery__image">
+        <img src="/assets/29.jpg" alt="Image 6">
+      </div>
+    </div>    
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const toggleMenuBtn = document.getElementById('toggleMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+
+    toggleMenuBtn.addEventListener('click', function() {
+      if (mobileMenu.style.display === 'block') {
+        mobileMenu.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scroll behavior
+      } else {
+      mobileMenu.style.display = 'block';
+      document.body.style.overflow = 'hidden'; // Prevent scrolling of page content
+      }
+    });
+
+    // Prevent scrolling of page content when mobile menu is open
+    mobileMenu.addEventListener('scroll', function(event) {
+    event.stopPropagation();
+    });
+    });
+    </script>
+
+    <footer>
+      <!-- Include the footer -->
+      <%- include('../components/footer') %>
+    </footer>
+  </body>
+</html>

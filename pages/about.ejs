@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/logo fav.png">
+    <title>About Us</title>
+</head>
+<body>
+    <header>
+        <!-- Include the header -->
+        <%- include('../components/header') %>
+    </header>
+
+    <section>
+        <!-- Banner Photo with Text -->
+        <div class="banner">
+            <div class="banner-text">
+                <h2>About <b style="color: #fb923c;"> Us</b> - What <b style="color: #fb923c;">We</b> Do?</h2>
+                <p>We at <b style="color: #fb923c;">Dr. Physio Clinic</b> Deliver a wide range of Physiotherapy services within a nurturing and encouraging atmosphere, 
+                    led by committed professionals who advocate for independence. Rest assured that your personalized care plan will be 
+                    diligently administered.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section__container doctors__container" style="background-color: white;">
+        <div class="doctors__header">
+          <div class="doctors__header__content">
+            <h2 class="section__header"><b style="color: #fb923c;">Our</b> Special Doctors</h2>
+            <p>
+              We take pride in our exceptional team of doctors, each a specialist
+              in their respective fields.
+            </p>
+          </div>
+          <div class="doctors__nav">
+            <span><i class="ri-arrow-left-line"></i></span>
+            <span><i class="ri-arrow-right-line"></i></span>
+          </div>
+        </div>
+        <div class="doctors__grid">
+          <div class="doctors__card">
+            <div class="doctors__card__image">
+              <img src="assets/62.jpg" alt="doctor" />
+              <div class="doctors__socials">
+                <span><i class="ri-instagram-line"></i></span>
+                <span><i class="ri-facebook-fill"></i></span>
+                <span><i class="ri-heart-fill"></i></span>
+                <span><i class="ri-twitter-fill"></i></span>
+              </div>
+            </div>
+            <h4>Prince Jacob Mathew</h4>
+            <p>Chief Physiotherapist</p>
+          </div>
+          <div class="doctors__card">
+            <div class="doctors__card__image">
+              <img src="assets/60.jpg" alt="doctor" />
+              <div class="doctors__socials">
+                <span><i class="ri-instagram-line"></i></span>
+                <span><i class="ri-facebook-fill"></i></span>
+                <span><i class="ri-heart-fill"></i></span>
+                <span><i class="ri-twitter-fill"></i></span>
+              </div>
+            </div>
+            <h4>Jacob John</h4>
+            <p>Physiotherapist</p>
+          </div>
+          <div class="doctors__card">
+            <div class="doctors__card__image">
+              <img src="assets/63.jpg" alt="doctor" />
+              <div class="doctors__socials">
+                <span><i class="ri-instagram-line"></i></span>
+                <span><i class="ri-facebook-fill"></i></span>
+                <span><i class="ri-heart-fill"></i></span>
+                <span><i class="ri-twitter-fill"></i></span>
+              </div>
+            </div>
+            <h4>John P. George</h4>
+            <p>Physiotherapist</p>
+          </div>
+        </div>
+      </section>
+
+    <footer>
+        <!-- Include the footer -->
+        <%- include('../components/footer') %>
+    </footer>
+
+</body>
+</html>
