@@ -1,7 +1,5 @@
 # DrPhysioClinic-Physio-Appointment-Website
 
-Sure, here's a basic template for a README file for your physio clinic website:
-
 Dr. Physio Clinic Website
 Welcome to the Dr. Physio Clinic website! This repository contains the source code for our clinic's website, where patients can learn about our services, read testimonials, and contact us for appointments or inquiries.
 
