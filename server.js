@@ -1,154 +1,171 @@
-require('dotenv').config(); // Load env variables
+  const express = require('express');
+  const app = express();
+  const path = require('path');
+  const bodyParser = require('body-parser');
+  const mongoose = require('mongoose');
+  const nodemailer = require('nodemailer');
+  const fs = require('fs');
 
-const express = require('express');
-const app = express();
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const nodemailer = require('nodemailer');
-const fs = require('fs');
+  const port = process.env.PORT || 3000;
 
-const port = process.env.PORT || 3000;
+  // Set EJS as the view engine
+  app.set('view engine', 'ejs');
 
-// Set EJS as the view engine
-app.set('view engine', 'ejs');
+  // Set the directory where your views (EJS templates) are located
+  app.set('views', path.join(__dirname)); // Set views directory to current directory
 
-// Set the directory where your views (EJS templates) are located
-app.set('views', path.join(__dirname));
+  // Serve static files from the 'assets' directory
+  app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
-// Serve static files from the 'assets' and 'public' directories
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-app.use(express.static(path.join(__dirname, 'public')));
+  // Serve static files (CSS, JS, images) from the 'public' directory
+  app.use(express.static(path.join(__dirname, 'public')));
 
-// Parse body
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+  // Parse URL-encoded bodies (as sent by HTML forms)
+  app.use(bodyParser.urlencoded({ extended: true }));
 
-// MongoDB connection
-const username = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME;
+  // Parse JSON bodies (as sent by API clients)
+  app.use(bodyParser.json());
 
-mongoose.connect(
-  `mongodb+srv://${username}:${password}@cluster0.qkrprta.mongodb.net/${dbName}?retryWrites=true&w=majority`,
-  { useNewUrlParser: true, useUnifiedTopology: true }
-)
-.then(() => {
-  console.log('Connected to MongoDB');
-})
-.catch((error) => {
-  console.error('Error connecting to MongoDB:', error);
-});
+  // MongoDB connection
+  const username = 'mern_user';
+  const password = 'Bluelegion';
+  const dbName = 'PhysioClinic';
 
-// Mongoose Schemas
-const AppointmentSchema = new mongoose.Schema(
-  {
-    firstName: String,
-    lastName: String,
-    email: String,
-    address: String,
-    phoneNumber: Number,
-  },
-  {
-    timestamps: true
-  }
-);
+  mongoose.connect(`mongodb+srv://${username}:${password}@cluster0.qkrprta.mongodb.net/${dbName}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((error) => {
+      console.error('Error connecting to MongoDB:', error);
+    });
 
-const Appointment = mongoose.model('Appointment', AppointmentSchema);
+    const AppointmentSchema = new mongoose.Schema(
+      {
+        firstName: String,
+        lastName: String,
+        email: String,
+        address: String,
+        phoneNumber: Number,
+      },
+      {
+        timestamps: true
+      }
+    );
 
-const ContactSchema = new mongoose.Schema(
-  {
-  username: String,
-  email: String,
-  phoneNumber: String,
-  message: String,
-  },
-  {
-    timestamps:true
-  }
-);
+  const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
-const Contact = mongoose.model('Contact', ContactSchema);
+    const ContactSchema = new mongoose.Schema(
+      {
+      username: String,
+      email: String,
+      phoneNumber: String,
+      message: String,
+      },
+      {
+        timestamps:true
+      }
+    );
+    
+  const Contact = mongoose.model('Contact', ContactSchema);
 
-// SMTP Transporter using env
-const smtpTransporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+  const smtpTransporter = nodemailer.createTransport({
+    host: 'mail.drphysioclinic.org',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'support@drphysioclinic.org',
+      pass: 'Drphysioclinic',
+    },
+  });
 
-// Handle appointment form
-app.post('/submit_form', async (req, res) => {
-  try {
-    const formData = req.body;
-    const appointment = new Appointment(formData);
+  // Define route for handling form submissions for appointments
+    app.post('/submit_form', async (req, res) => {
+    try {
+    const appointment = new Appointment(req.body);
     await appointment.save();
-
-    await smtpTransporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: process.env.SMTP_USER,
+    
+    console.log('Saved to MongoDB');
+    
+    // Send email but don't crash if it fails
+    smtpTransporter.sendMail({
+      from: 'support@drphysioclinic.org',
+      to: 'support@drphysioclinic.org',
       subject: 'New Appointment',
-      text: JSON.stringify(formData, null, 2),
+      text: JSON.stringify(req.body, null, 2),
+    }).catch(err => {
+      console.error("Email failed:", err);
+    });
+    
+    const thankyouHtml = fs.readFileSync(
+      path.join(__dirname, 'thankyou.html'),
+      'utf8'
+    );
+    
+    res.send(thankyouHtml);
+    
+    } catch (error) {
+    console.error("REAL ERROR:", error);
+    res.status(500).send('Something went wrong.');
+    }
     });
 
-    console.log('Appointment form submitted successfully');
-    const thankyouHtml = fs.readFileSync('./thankyou.html', 'utf8');
-    res.send(thankyouHtml);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred.');
-  }
-});
 
-// Handle contact form
-app.post('/submit_contact', async (req, res) => {
-  try {
-    const contactData = req.body;
-    const contact = new Contact(contactData);
-    await contact.save();
+  // Define route for handling form submissions for contacts
+  app.post('/submit_contact', async (req, res) => {
+    try {
+      const contactData = req.body;
 
-    await smtpTransporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: process.env.SMTP_USER,
-      subject: 'New Contact Form Submission',
-      text: JSON.stringify(contactData, null, 2),
-    });
+      // Create new contact instance
+      const contact = new Contact(contactData);
 
-    console.log('Contact form submitted successfully');
-    const thankyouHtml = fs.readFileSync('./thankyou.html', 'utf8');
-    res.send(thankyouHtml);
-  } catch (error) {
-    console.error('Error submitting contact form:', error);
-    res.status(500).send('An error occurred while submitting the contact form.');
-  }
-});
+      // Save contact data to MongoDB
+      await contact.save();
 
-// Page routes
-app.get('/', (req, res) => {
-  res.render('pages/index', { title: 'Home' });
-});
+      // Send email notification
+      const mailOptions = {
+        from: 'support@drphysioclinic.org',
+        to: 'support@drphysioclinic.org',
+        subject: 'New Contact Form Submission',
+        text: JSON.stringify(contactData, null, 2),
+      };
 
-app.get('/testimonials', (req, res) => {
-  res.render('pages/testimonials', { title: 'Testimonials' });
-});
+      await smtpTransporter.sendMail(mailOptions);
 
-app.get('/about', (req, res) => {
-  res.render('pages/about', { title: 'About Us' });
-});
+      // Log a success message
+      console.log('Contact form submitted successfully');
 
-app.get('/contact', (req, res) => {
-  res.render('pages/contact', { title: 'Contact Us' });
-});
+      // Read the HTML content from thankyou.html (assuming it's in the root directory)
+      const thankyouHtml = fs.readFileSync('./thankyou.html', 'utf8');
 
-app.get('/services', (req, res) => {
-  res.render('pages/services', { title: 'Our Services' });
-});
+      // Send the HTML content as a response
+      res.send(thankyouHtml);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      res.status(500).send('An error occurred while submitting the contact form.');
+    }
+  });
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server is listening at http://localhost:${port}`);
-});
+  // Define routes for rendering pages
+  app.get('/', (req, res) => {
+      res.render('pages/index', { title: 'Home' }); // Render the 'index.ejs' file
+  });
+
+  app.get('/testimonials', (req, res) => {
+      res.render('pages/testimonials', { title: 'Testimonials' });
+  });
+
+  app.get('/about', (req, res) => {
+      res.render('pages/about', { title: 'About Us' });
+  });
+
+  app.get('/contact', (req, res) => {
+      res.render('pages/contact', { title: 'Contact Us' });
+  });
+
+  app.get('/services', (req, res) => {
+      res.render('pages/services', { title: 'Our Services' });
+  });
+
+  app.listen(port, () => {
+      console.log(`Server is listening at http://localhost:${port}`);
+  });
