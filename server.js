@@ -41,21 +41,33 @@ mongoose.connect(
 });
 
 // Mongoose Schemas
-const AppointmentSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
-  email: String,
-  address: String,
-  phoneNumber: Number,
-});
+const AppointmentSchema = new mongoose.Schema(
+  {
+    firstName: String,
+    lastName: String,
+    email: String,
+    address: String,
+    phoneNumber: Number,
+  },
+  {
+    timestamps: true
+  }
+);
+
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
-const ContactSchema = new mongoose.Schema({
+const ContactSchema = new mongoose.Schema(
+  {
   username: String,
   email: String,
   phoneNumber: String,
   message: String,
-});
+  },
+  {
+    timestamps:true
+  }
+);
+
 const Contact = mongoose.model('Contact', ContactSchema);
 
 // SMTP Transporter using env
