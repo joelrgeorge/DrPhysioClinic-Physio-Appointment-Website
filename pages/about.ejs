@@ -6,6 +6,23 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <title>About Us</title>
 </head>
+
+<style>
+.doctors__card__image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.doctors__card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+</style>
+
 <body>
     <!-- Google Tag Manager (noscript) -->
         <noscript>
@@ -33,66 +50,135 @@
     </section>
 
     <section class="section__container doctors__container" style="background-color: white;">
-        <div class="doctors__header">
-          <div class="doctors__header__content">
-            <h2 class="section__header"><b style="color: #fb923c;">Our</b> Special Doctors</h2>
-            <p>
-              We take pride in our exceptional team of doctors, each a specialist
-              in their respective fields.
-            </p>
-          </div>
-          <div class="doctors__nav">
-            <span><i class="ri-arrow-left-line"></i></span>
-            <span><i class="ri-arrow-right-line"></i></span>
-          </div>
+      <div class="doctors__header">
+        <div class="doctors__header__content">
+          <h2 class="section__header">
+            <b style="color: #fb923c;">Our</b> Special Doctors
+          </h2>
+          <p>
+            We take pride in our exceptional team of doctors, each a specialist
+            in their respective fields.
+          </p>
         </div>
-        <div class="doctors__grid">
-          <div class="doctors__card">
-            <div class="doctors__card__image">
-              <img src="assets/62.jpg" alt="doctor" />
-              <div class="doctors__socials">
+
+        <div class="doctors__nav">
+          <span><i class="ri-arrow-left-line"></i></span>
+          <span><i class="ri-arrow-right-line"></i></span>
+        </div>
+      </div>
+
+      <div class="doctors__grid">
+
+        <!-- Doctor 1 -->
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="assets/DSC02948.jpeg" alt="doctor" />
+
+            <div class="doctors__socials">
               <a href="https://www.instagram.com/physiotherapist_dr_prince?igsh=MXJ2dzZ6OWU3MTYycw%3D%3D&utm_source=qr"
                 target="_blank"
                 rel="noopener noreferrer"
                 style="color: white; text-decoration: none;">
                 <span><i class="ri-instagram-line"></i></span>
-              </a>                
-                <span><i class="ri-facebook-fill"></i></span>
-                <span><i class="ri-heart-fill"></i></span>
-                <span><i class="ri-twitter-fill"></i></span>
-              </div>
+              </a>
+
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
             </div>
-            <h4>Prince Jacob Mathew</h4>
-            <p>Chief Physiotherapist</p>
           </div>
-          <div class="doctors__card">
-            <div class="doctors__card__image">
-              <img src="assets/60.jpg" alt="doctor" />
-              <div class="doctors__socials">
-                <span><i class="ri-instagram-line"></i></span>
-                <span><i class="ri-facebook-fill"></i></span>
-                <span><i class="ri-heart-fill"></i></span>
-                <span><i class="ri-twitter-fill"></i></span>
-              </div>
-            </div>
-            <h4>Jacob John</h4>
-            <p>Physiotherapist</p>
-          </div>
-          <div class="doctors__card">
-            <div class="doctors__card__image">
-              <img src="assets/63.jpg" alt="doctor" />
-              <div class="doctors__socials">
-                <span><i class="ri-instagram-line"></i></span>
-                <span><i class="ri-facebook-fill"></i></span>
-                <span><i class="ri-heart-fill"></i></span>
-                <span><i class="ri-twitter-fill"></i></span>
-              </div>
-            </div>
-            <h4>John P. George</h4>
-            <p>Physiotherapist</p>
-          </div>
+
+          <h4>Prince Jacob Mathew</h4>
+          <p>Chief Physiotherapist</p>
         </div>
-      </section>
+
+        <!-- Doctor 2 -->
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="assets/DSC02967.jpeg" alt="doctor" />
+
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+
+          <h4>Junaid Patel</h4>
+          <p>Chief Physiotherapist</p>
+        </div>
+
+        <!-- Doctor 3 -->
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="assets/DSC02944.jpeg" alt="doctor" />
+
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+
+          <h4>Giri Krishnan S</h4>
+          <p>Physiotherapist</p>
+        </div>
+
+        <!-- Doctor 4 -->
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="assets/DSC02975.jpeg" alt="doctor" />
+
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+
+          <h4>Mohammad Salman Faris</h4>
+          <p>Physiotherapist</p>
+        </div>
+
+        <!-- Doctor 5 -->
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="assets/placeholder.png" alt="doctor" />
+
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+
+          <h4>Sharon Binny</h4>
+          <p>Physiotherapist</p>
+        </div>
+
+        <!-- Doctor 6 -->
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="assets/placeholder.png" alt="doctor" />
+
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+
+          <h4>Vishnu Narayanan K P</h4>
+          <p>Physiotherapist</p>
+        </div>
+
+      </div>
+    </section>
 
     <footer>
         <!-- Include the footer -->
