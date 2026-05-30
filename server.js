@@ -5,6 +5,7 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const axios = require("axios");
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 
@@ -44,8 +45,7 @@ mongoose.connect(
 
   const AppointmentSchema = new mongoose.Schema(
     {
-      firstName: String,
-      lastName: String,
+      name: String,
       email: String,
       address: String,
       phoneNumber: String,
@@ -59,9 +59,9 @@ const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
   const ContactSchema = new mongoose.Schema(
     {
-    username: String,
+    name: String,
     email: String,
-    phoneNumber: String,
+    phone: String,
     message: String,
     },
     {
@@ -81,12 +81,38 @@ const smtpTransporter = nodemailer.createTransport({
   },
 });
 
+async function emitEvent(payload) {
+  try {
+    await axios.post(
+      process.env.N8N_WEBHOOK_URL,
+      payload
+    );
+  } catch (err) {
+    console.error(
+      "Event dispatch failed:",
+      err.message
+    );
+  }
+}
+
 // Define route for handling form submissions for appointments
   app.post('/submit_form', async (req, res) => {
   try {
   const appointment = new Appointment(req.body);
   await appointment.save();
   
+  emitEvent({
+    event: "AppointmentSubmitted",
+    timestamp: new Date().toISOString(),
+    source: "website",
+    version: 1,
+    data: {
+      name: appointment.name,
+      email: appointment.email,
+      phoneNumber: appointment.phoneNumber,
+      address: appointment.address,
+    },
+  });
   console.log('Saved to MongoDB');
   
   // Send email but don't crash if it fails
@@ -116,13 +142,31 @@ const smtpTransporter = nodemailer.createTransport({
 // Define route for handling form submissions for contacts
 app.post('/submit_contact', async (req, res) => {
   try {
+
+    console.log("CONTACT ROUTE HIT");
+
     const contactData = req.body;
+
+    console.log("CONTACT BODY:", req.body);
 
     // Create new contact instance
     const contact = new Contact(contactData);
 
     // Save contact data to MongoDB
     await contact.save();
+
+    emitEvent({
+      event: "ContactFormSubmitted",
+      timestamp: new Date().toISOString(),
+      source: "website",
+      version: 1,
+      data: {
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        message: contact.message,
+      },
+    });
 
     // Send email notification
     const mailOptions = {
