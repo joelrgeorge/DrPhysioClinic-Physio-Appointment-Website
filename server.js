@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
+app.set("trust proxy", 1);
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -14,6 +15,9 @@ const port = process.env.PORT || 3000;
 const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
 const DB_NAME = process.env.DB_NAME;
+
+const rateLimit =
+  require("express-rate-limit");
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
@@ -43,33 +47,116 @@ mongoose.connect(
   console.error("Error connecting to MongoDB:", error);
 });
 
-  const AppointmentSchema = new mongoose.Schema(
-    {
-      name: String,
-      email: String,
-      address: String,
-      phoneNumber: String,
-    },
-    {
-      timestamps: true
-    }
-  );
+  function validateHumanSubmission(req, res) {
 
-const Appointment = mongoose.model('Appointment', AppointmentSchema);
+  // Honeypot check
+  if (req.body.website) {
 
-  const ContactSchema = new mongoose.Schema(
-    {
-    name: String,
-    email: String,
-    phone: String,
-    message: String,
-    },
-    {
-      timestamps:true
-    }
-  );
-  
-const Contact = mongoose.model('Contact', ContactSchema);
+    console.warn(
+      `[BOT] Turnstile failed: ${req.ip}`
+    );
+
+    res.status(400).send("Invalid submission");
+    return false;
+  }
+
+  // Timestamp check
+  const loadTime =
+    Number(req.body.formLoadedAt);
+
+  if (!loadTime) {
+
+    console.warn(
+      "[BOT] Missing timestamp:",
+      req.ip
+    );
+
+    res.status(400).send("Verification failed");
+    return false;
+  }
+
+  const elapsed =
+    Date.now() - loadTime;
+
+  if (elapsed < 3000) {
+
+    console.warn(
+      `[BOT] Submitted too quickly (${elapsed}ms):`,
+      req.ip
+    );
+
+    res.status(400).send("Verification failed");
+    return false;
+  }
+
+  return true;
+}
+
+async function verifyTurnstile(token) {
+
+  try {
+
+    const response =
+      await axios.post(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        new URLSearchParams({
+          secret:
+            process.env.TURNSTILE_SECRET,
+          response: token,
+        }),
+        {
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+    return response.data.success;
+
+  } catch (err) {
+
+    console.error(
+      "Turnstile verification failed:",
+      err.message
+    );
+
+    return false;
+  }
+
+}
+
+const AppointmentSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phoneNumber: String,
+
+  condition: String,
+  preferredDate: String,
+
+  painDescription: String,
+  treatment: String,
+  preferredTime: String,
+  additionalNotes: String,
+}, {
+  timestamps: true
+});
+
+  const Appointment = mongoose.model('Appointment', AppointmentSchema);
+
+const ContactSchema = new mongoose.Schema(
+  {
+  name: String,
+  email: String,
+  phone: String,
+  message: String,
+  },
+  {
+    timestamps:true
+  }
+);
+
+  const Contact = mongoose.model('Contact', ContactSchema);
 
 const smtpTransporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -95,59 +182,228 @@ async function emitEvent(payload) {
   }
 }
 
-// Define route for handling form submissions for appointments
-  app.post('/submit_form', async (req, res) => {
-  try {
-  const appointment = new Appointment(req.body);
-  await appointment.save();
-  
-  emitEvent({
-    event: "AppointmentSubmitted",
-    timestamp: new Date().toISOString(),
-    source: "website",
-    version: 1,
-    data: {
-      name: appointment.name,
-      email: appointment.email,
-      phoneNumber: appointment.phoneNumber,
-      address: appointment.address,
-    },
-  });
-  console.log('Saved to MongoDB');
-  
-  // Send email but don't crash if it fails
-  smtpTransporter.sendMail({
-    from: process.env.SMTP_USER,
-    to: process.env.SMTP_USER,
-    subject: 'New Appointment',
-    text: JSON.stringify(req.body, null, 2),
-  }).catch(err => {
-    console.error("Email failed:", err);
-  });
-  
-  const thankyouHtml = fs.readFileSync(
-    path.join(__dirname, 'thankyou.html'),
-    'utf8'
-  );
-  
-  res.send(thankyouHtml);
-  
-  } catch (error) {
-  console.error("REAL ERROR:", error);
-  res.status(500).send('Something went wrong.');
-  }
-  });
+const formLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
 
+  max: 3,
+
+  standardHeaders: true,
+  legacyHeaders: false,
+
+  message: {
+    success: false,
+    message:
+      "Too many submissions. Please try again later."
+  },
+
+  handler: (req, res) => {
+
+    console.warn(
+      `[RATE LIMIT] ${req.ip}`
+    );
+
+    return res.status(429).send(
+      "Too many submissions. Please try again later."
+    );
+
+  }
+});
+
+app.post(
+  '/submit_form',
+  formLimiter,
+  async (req, res) => {
+
+const turnstileToken =
+  req.body["cf-turnstile-response"];
+
+if (!turnstileToken) {
+
+  console.warn(
+    "[BOT] Missing Turnstile token"
+  );
+
+  return res
+    .status(400)
+    .send("Verification failed");
+
+}
+
+const verified =
+  await verifyTurnstile(
+    turnstileToken
+  );
+
+if (!verified) {
+
+  console.warn(
+    "[BOT] Turnstile failed"
+  );
+
+  return res
+    .status(400)
+    .send("Verification failed");
+
+}
+
+  try {
+
+    console.log(
+      "\n========== APPOINTMENT =========="
+    );
+
+    console.log(
+      "BODY:",
+      JSON.stringify(req.body, null, 2)
+    );
+
+    if (!validateHumanSubmission(req, res)) {
+      return;
+    }
+
+    const appointment =
+      new Appointment(req.body);
+
+    await appointment.save();
+
+    console.log(
+      "Appointment saved:",
+      appointment._id
+    );
+
+    emitEvent({
+      event: "AppointmentSubmitted",
+      timestamp: new Date().toISOString(),
+      source: "website",
+      version: 1,
+      data: {
+        name: appointment.name,
+        email: appointment.email,
+        phoneNumber: appointment.phoneNumber,
+
+        condition:
+          appointment.condition,
+
+        preferredDate:
+          appointment.preferredDate,
+
+        painDescription:
+          appointment.painDescription,
+
+        treatment:
+          appointment.treatment,
+
+        preferredTime:
+          appointment.preferredTime,
+
+        additionalNotes:
+          appointment.additionalNotes,
+      },
+    });
+
+    smtpTransporter.sendMail({
+
+      from: process.env.SMTP_USER,
+      to: process.env.SMTP_USER,
+
+      subject:
+        `New Appointment - ${appointment.name}`,
+
+      text: JSON.stringify(
+        req.body,
+        null,
+        2
+      ),
+
+    }).then(() => {
+
+      console.log(
+        "Appointment email sent"
+      );
+
+    }).catch(err => {
+
+      console.error(
+        "Appointment email failed:",
+        err
+      );
+
+    });
+
+    const thankyouHtml =
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          'thankyou.html'
+        ),
+        'utf8'
+      );
+
+    res.send(thankyouHtml);
+
+  } catch (error) {
+
+    console.error(
+      "APPOINTMENT ERROR:",
+      error
+    );
+
+    res
+      .status(500)
+      .send('Something went wrong.');
+
+  }
+
+});
 
 // Define route for handling form submissions for contacts
-app.post('/submit_contact', async (req, res) => {
+app.post(
+  '/submit_contact',
+  formLimiter,
+  async (req, res) => {
+
+const turnstileToken =
+  req.body["cf-turnstile-response"];
+
+if (!turnstileToken) {
+
+  console.warn(
+    "[BOT] Missing Turnstile token"
+  );
+
+  return res
+    .status(400)
+    .send("Verification failed");
+
+}
+
+const verified =
+  await verifyTurnstile(
+    turnstileToken
+  );
+
+if (!verified) {
+
+  console.warn(
+    "[BOT] Turnstile failed"
+  );
+
+  return res
+    .status(400)
+    .send("Verification failed");
+
+}
+
   try {
 
     console.log("CONTACT ROUTE HIT");
 
     const contactData = req.body;
 
-    console.log("CONTACT BODY:", req.body);
+    console.log(
+      "CONTACT BODY:",
+      JSON.stringify(req.body, null, 2)
+    );
 
     // Create new contact instance
     const contact = new Contact(contactData);

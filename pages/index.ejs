@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-<!-- Google Tag Manager -->
-<script>
-  (function(w,d,s,l,i){
-    w[l]=w[l]||[];
-    w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
-    var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l!='dataLayer' ? '&l='+l : '';
-    j.async=true;
-    j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-    f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NQPNQS2C');
-</script>
-<!-- End Google Tag Manager -->
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];
+        w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l!='dataLayer' ? '&l='+l : '';
+        j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-NQPNQS2C');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer>
+    </script>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,6 +32,81 @@
     <link rel="stylesheet" href="styles.css" />
     <title>Dr. Physio Clinic</title>
   </head>
+
+  <script>
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+      const step1 =
+        document.getElementById("step1");
+
+      const step2 =
+        document.getElementById("step2");
+
+      document
+        .getElementById("nextStep")
+        .addEventListener(
+          "click",
+          () => {
+
+            const form =
+              document.getElementById(
+                "appointmentForm"
+              );
+
+            const requiredFields =
+              step1.querySelectorAll(
+                "[required]"
+              );
+
+            for (const field of requiredFields) {
+
+              if (!field.checkValidity()) {
+
+                field.reportValidity();
+
+                return;
+              }
+            }
+
+            step1.classList.remove(
+              "active"
+            );
+
+            step2.classList.add(
+              "active"
+            );
+          }
+        );
+
+      document
+        .getElementById("prevStep")
+        .addEventListener(
+          "click",
+          () => {
+
+            step2.classList.remove(
+              "active"
+            );
+
+            step1.classList.add(
+              "active"
+            );
+          }
+        );
+
+      document
+        .getElementById(
+          "formLoadedAt"
+        )
+        .value = Date.now();
+
+    });
+
+  </script>
+  
   <body>
         <!-- Google Tag Manager (noscript) -->
             <noscript>
@@ -70,14 +151,148 @@
           <button class="serve_btn";><a href="/services" style="color: aliceblue";>See Services</a></button>
         </div>
         <div class="header__form">
-          <form action="/submit_form" method="post">
-            <h4>Book Appointment</h4>
-            <input type="text" name="name" placeholder="Full Name" />
-            <input type="email" name="email" placeholder="Email" />
-            <input type="text" name="address" placeholder="Address" />
-            <input type="tel" name="phoneNumber" placeholder="Phone No." />
-            <button class="btn form__btn" type="submit">Book Appointment</button>
-        </form>        
+          <form action="/submit_form" method="post" id="appointmentForm">
+
+            <!-- STEP 1 -->
+
+            <div class="form-step active" id="step1">
+
+              <h4>Book Appointment</h4>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                required
+              >
+
+              <input
+                type="tel"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                required
+              >
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+              >
+
+              <select
+                name="condition"
+                required
+              >
+                <option value="">
+                  Primary Concern
+                </option>
+
+                <option>Chronic Back Pain</option>
+                <option>Arthritis</option>
+                <option>Stroke Rehabilitation</option>
+                <option>Knee Pain</option>
+                <option>Frozen Shoulder</option>
+                <option>Post Accident Rehabilitation</option>
+                <option>Book Consultation</option>
+              </select>
+
+              <input
+                type="date"
+                name="preferredDate"
+                required
+              >
+
+              <button
+                type="button"
+                class="btn form__btn"
+                id="nextStep"
+              >
+                Continue →
+              </button>
+
+            </div>
+
+            <!-- STEP 2 -->
+
+            <div class="form-step" id="step2">
+
+              <h4>Consultation Details</h4>
+
+              <textarea
+                name="painDescription"
+                placeholder="Describe your pain or condition"
+              ></textarea>
+
+              <select name="treatment">
+
+                <option value="">
+                  Preferred Treatment
+                </option>
+
+                <option>Kinesio Taping</option>
+                <option>Myofascial Release</option>
+                <option>Sports Massage</option>
+                <option>Dry Needling</option>
+                <option>Cupping Therapy</option>
+                <option>Electro Therapy</option>
+                <option>Book Consultation</option>
+
+              </select>
+
+              <input
+                type="time"
+                name="preferredTime"
+              >
+
+              <textarea
+                name="additionalNotes"
+                placeholder="Additional Notes"
+              ></textarea>
+
+              <!-- Honeypot -->
+
+              <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAADiF7jG8jpwYkdZ-">
+              </div>
+
+              <input
+                type="text"
+                name="website"
+                autocomplete="off"
+                tabindex="-1"
+                style="display:none"
+              >
+
+              <input
+                type="hidden"
+                id="formLoadedAt"
+                name="formLoadedAt"
+              >
+
+              <div class="form-navigation">
+
+                <button
+                  type="button"
+                  class="btn"
+                  id="prevStep"
+                >
+                  ← Back
+                </button>
+
+                <button
+                  type="submit"
+                  class="btn form__btn"
+                >
+                  Submit
+                </button>
+
+              </div>
+
+            </div>
+
+          </form>    
         </div>
       </div>
 

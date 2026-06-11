@@ -6,11 +6,37 @@
     <link rel="icon" type="image/png" href="/assets/favicon.png">
     <title>Contact Us</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const field =
+          document.getElementById(
+            "contactFormLoadedAt"
+          );
+
+        if (field) {
+          field.value = Date.now();
+        }
+      });
+    </script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
     <script
-      src="https://kit.fontawesome.com/64d58efce2.js"
-      crossorigin="anonymous"
-    ></script>
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer>
+    </script>
 </head>
+
 <body>
     <!-- Google Tag Manager (noscript) -->
         <noscript>
@@ -55,7 +81,7 @@
               <a href="#">
                 <i class="fab fa-twitter"></i>
               </a>
-              <a href="#">
+              <a href="https://www.instagram.com/physiotherapist_dr_prince/">
                 <i class="fab fa-instagram"></i>
               </a>
               <a href="#">
@@ -70,24 +96,97 @@
           <span class="circle two"></span>
 
           <form action="/submit_contact" method="post">
-            <h3 class="contact__title">Contact us</h3>
+            <h3 class="contact__title">Contact Us</h3>
+
             <div class="input-container">
-              <input type="contact__text" name="name" placeholder="Full Name" class="contact__input" />
-              <span>Full Name</span>
+              <input
+                type="text"
+                name="name"
+                class="contact__input"
+                placeholder="Full Name"
+                required
+              >
             </div>
+
             <div class="input-container">
-              <input type="email" name="email" placeholder="Email" class="contact__input" />
-              <span>Email</span>
+              <input
+                type="tel"
+                name="phone"
+                class="contact__input"
+                placeholder="Phone Number"
+                required
+              >
             </div>
+
             <div class="input-container">
-              <input type="tel" name="phone" placeholder="Phone Number" class="contact__input" />
-              <span>Phone</span>
+              <input
+                type="email"
+                name="email"
+                class="contact__input"
+                placeholder="Email Address"
+              >
             </div>
+
+            <div class="input-container">
+              <select name="enquiryType" class="contact__input" required>
+                <option value="">Reason for Contact</option>
+                <option>Book Consultation</option>
+                <option>Home Visit Enquiry</option>
+                <option>Treatment Information</option>
+                <option>Pricing & Packages</option>
+                <option>Sports Injury Consultation</option>
+                <option>Post Surgery Rehabilitation</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="input-container">
+              <select name="condition" class="contact__input">
+                <option value="">Primary Concern</option>
+                <option>Chronic Back Pain</option>
+                <option>Arthritis</option>
+                <option>Stroke Rehabilitation</option>
+                <option>Knee Pain</option>
+                <option>Frozen Shoulder</option>
+                <option>Post Accident Rehabilitation</option>
+                <option>Other</option>
+              </select>
+            </div>
+
             <div class="input-container textarea">
-              <textarea name="message" placeholder="Message" class="contact__input"></textarea>
-              <span>Message</span>
+              <textarea
+                name="message"
+                class="contact__input"
+                placeholder="Please briefly describe your condition or enquiry"
+              ></textarea>
             </div>
-            <input type="submit" value="Send" class="contact__btn" />
+
+            <input
+              type="text"
+              name="website"
+              autocomplete="off"
+              tabindex="-1"
+              style="display:none"
+            >
+
+            <input
+              type="hidden"
+              id="contactFormLoadedAt"
+              name="formLoadedAt"
+            >
+
+            <div
+              class="cf-turnstile"
+              data-sitekey="0x4AAAAAADiF7jG8jpwYkdZ-">
+            </div>
+
+            <button
+              type="submit"
+              class="contact__btn"
+              style="margin-top:1rem;"
+            >
+              Send Message
+            </button>
           </form>
         </div>
       </div>
