@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+<%- include('./styles/email.css') %>
+</style>
+</head>
+
+<body>
+
+<div class="email-wrapper">
+
+  <div class="header">
+
+    <img
+      src="https://drphysioclinic.org/assets/logo.png"
+      class="logo"
+      alt="Dr Physio Clinic"
+    >
+
+    <h1>📩 New Contact Enquiry</h1>
+
+    <p>
+      Dr. Physio Clinic • Kothanur, Bangalore
+    </p>
+
+  </div>
+
+  <div class="content">
+
+    <div class="alert">
+      A visitor submitted a contact enquiry.
+    </div>
+
+    <div class="card">
+
+      <h2>Contact Details</h2>
+
+      <div class="row">
+        <span>Name</span>
+        <strong><%= contact.name %></strong>
+      </div>
+
+      <div class="row">
+        <span>Phone</span>
+        <strong>
+          <a href="tel:<%= contact.phone %>">
+            <%= contact.phone %>
+          </a>
+        </strong>
+      </div>
+
+      <div class="row">
+        <span>Email</span>
+        <strong>
+          <%= contact.email || 'Not provided' %>
+        </strong>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Enquiry Details</h2>
+
+      <div class="row">
+        <span>Reason</span>
+        <strong>
+          <%= contact.enquiryType || 'Not specified' %>
+        </strong>
+      </div>
+
+      <div class="row">
+        <span>Condition</span>
+        <strong>
+          <%= contact.condition || 'Not specified' %>
+        </strong>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Message</h2>
+
+      <p>
+        <%= contact.message || 'No message provided' %>
+      </p>
+
+    </div>
+
+    <div class="cta-container">
+
+      <a
+        href="tel:<%= contact.phone %>"
+        class="cta-button"
+      >
+        📞 Call Enquirer
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+
+    <p>
+      Website & Automation System by
+    </p>
+
+    <h3>Liege Technologies</h3>
+
+    <p>
+      Custom Websites • Automations • AI Solutions
+    </p>
+
+  </div>
+
+</div>
+
+</body>
+</html>

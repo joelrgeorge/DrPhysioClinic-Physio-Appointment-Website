@@ -12,6 +12,10 @@
   --max-width: 1200px;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -218,6 +222,14 @@ header {
 
 .header__form input::placeholder {
   color: var(--primary-color);
+}
+
+.form-label {
+  color: var(--secondary-color);
+  padding-left: 1rem;
+  font-weight: 500;
+  margin-bottom: -0.5rem;
+  display: block;
 }
 
 .form__btn {
@@ -796,6 +808,13 @@ background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%)
   outline: none;
 }
 
+.contact-form select,
+.contact-form textarea,
+.contact-form .contact__input {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
 .contact-form textarea {
   min-height: 120px;
   resize: vertical;
@@ -864,7 +883,7 @@ background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%)
   left: -13px;
 }
 
-form {
+.contact-form {
   padding: 2.3rem 2.2rem;
   z-index: 10;
   overflow: hidden;
@@ -1010,6 +1029,15 @@ textarea.input {
   margin: 0.7rem 0;
   align-items: center;
   font-size: 0.95rem;
+}
+
+.information {
+  min-width: 0;
+}
+
+.information p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .icon {
@@ -1381,6 +1409,11 @@ textarea.input {
 
 @media (width < 780px) {
 
+  .nav__container {
+    position: relative;
+    z-index: 10000;
+  }
+
   /* Style for the heading */
   .banner-text h2 {
     font-size: 24px;
@@ -1405,7 +1438,7 @@ textarea.input {
     width: 100%; /* Take up the full width of the viewport */
     padding: 10px;
     list-style-type: none;
-    z-index: 1000; /* Ensure it's above other content */
+    z-index: 10000; /* Ensure it's above other content */
   }
   .mobile-menu li {
     padding: 8px 16px;
@@ -1563,6 +1596,31 @@ textarea.input {
   }
 }
 
+@media (max-width: 400px) {
+  .cf-turnstile {
+    transform: scale(0.85);
+    transform-origin: left top;
+  }
+}
+
+.cf-turnstile iframe {
+  max-width: 100% !important;
+}
+
+@media (max-width: 380px) {
+  .cf-turnstile {
+    transform: scale(0.85);
+    transform-origin: left top;
+  }
+}
+
+@media (max-width: 345px) {
+  .cf-turnstile {
+    transform: scale(0.82);
+    transform-origin: left top;
+  }
+}
+
 @media (max-width: 480px) {
   .contact__container {
     padding: 1.5rem;
@@ -1577,7 +1635,6 @@ textarea.input {
     display: none;
   }
 
-  form,
   .contact-info {
     padding: 1.7rem 1.6rem;
   }
@@ -1611,16 +1668,42 @@ textarea.input {
   }
 }
 
+@media (max-width: 375px) {
+
+  .contact__container {
+    padding: 0.75rem;
+  }
+
+  .contact__form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-info {
+    padding: 1.25rem;
+  }
+
+  .information {
+    word-break: break-word;
+  }
+
+  .contact__input {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 @media (max-width: 365px){
-    .action-buttons {
+  .action-buttons {
     margin-top: 20px;
     display: flex;
     justify-content: center;
     gap: 40px;
-}
+  }
 
-.action-buttons button {
+  .action-buttons button {
     padding: 5px 10px;
     font-size: 16px;
     margin: 0 5px;
+  }
 }

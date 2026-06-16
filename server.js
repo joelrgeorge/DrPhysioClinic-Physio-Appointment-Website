@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const ejs = require("ejs");
 const express = require('express');
 const app = express();
 app.set("trust proxy", 1);
@@ -15,6 +16,9 @@ const port = process.env.PORT || 3000;
 const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD);
 const DB_NAME = process.env.DB_NAME;
+
+const SKIP_TURNSTILE =
+  process.env.SKIP_TURNSTILE === "true";
 
 const rateLimit =
   require("express-rate-limit");
@@ -94,6 +98,13 @@ mongoose.connect(
 
 async function verifyTurnstile(token) {
 
+  if (SKIP_TURNSTILE) {
+    console.log(
+      "[DEV] Turnstile verification skipped"
+    );
+    return true;
+  }
+
   try {
 
     const response =
@@ -123,7 +134,6 @@ async function verifyTurnstile(token) {
 
     return false;
   }
-
 }
 
 const AppointmentSchema = new mongoose.Schema({
@@ -145,15 +155,19 @@ const AppointmentSchema = new mongoose.Schema({
   const Appointment = mongoose.model('Appointment', AppointmentSchema);
 
 const ContactSchema = new mongoose.Schema(
-  {
+{
   name: String,
   email: String,
   phone: String,
+
+  enquiryType: String,
+  condition: String,
+
   message: String,
-  },
-  {
-    timestamps:true
-  }
+},
+{
+  timestamps: true
+}
 );
 
   const Contact = mongoose.model('Contact', ContactSchema);
@@ -214,36 +228,37 @@ app.post(
   formLimiter,
   async (req, res) => {
 
-const turnstileToken =
-  req.body["cf-turnstile-response"];
+if (!SKIP_TURNSTILE) {
 
-if (!turnstileToken) {
+  const turnstileToken =
+    req.body["cf-turnstile-response"];
 
-  console.warn(
-    "[BOT] Missing Turnstile token"
-  );
+  if (!turnstileToken) {
 
-  return res
-    .status(400)
-    .send("Verification failed");
+    console.warn(
+      "[BOT] Missing Turnstile token"
+    );
 
-}
+    return res
+      .status(400)
+      .send("Verification failed");
+  }
 
-const verified =
-  await verifyTurnstile(
-    turnstileToken
-  );
+  const verified =
+    await verifyTurnstile(
+      turnstileToken
+    );
 
-if (!verified) {
+  if (!verified) {
 
-  console.warn(
-    "[BOT] Turnstile failed"
-  );
+    console.warn(
+      "[BOT] Turnstile failed"
+    );
 
-  return res
-    .status(400)
-    .send("Verification failed");
-
+    return res
+      .status(400)
+      .send("Verification failed");
+  }
 }
 
   try {
@@ -301,20 +316,29 @@ if (!verified) {
       },
     });
 
-    smtpTransporter.sendMail({
+    const html = await ejs.renderFile(
+      path.join(
+        __dirname,
+        "emails",
+        "appointment-email.ejs"
+      ),
+      {
+        appointment,
+        receivedAt:
+          new Date().toLocaleString(),
+        clinicName:
+          "Dr. Physio Clinic",
+        logoUrl:
+          "https://drphysioclinic.org/assets/logo.png"
+      }
+    );
 
+    await smtpTransporter.sendMail({
       from: process.env.SMTP_USER,
       to: process.env.SMTP_USER,
-
       subject:
         `New Appointment - ${appointment.name}`,
-
-      text: JSON.stringify(
-        req.body,
-        null,
-        2
-      ),
-
+      html
     }).then(() => {
 
       console.log(
@@ -330,16 +354,12 @@ if (!verified) {
 
     });
 
-    const thankyouHtml =
-      fs.readFileSync(
-        path.join(
-          __dirname,
-          'thankyou.html'
-        ),
-        'utf8'
-      );
-
-    res.send(thankyouHtml);
+    res.render('thankyou', {
+      name: appointment.name,
+      pageTitle: 'Appointment Request Received',
+      message:
+        'We have successfully received your appointment request and will contact you shortly to confirm your consultation.'
+    });
 
   } catch (error) {
 
@@ -362,36 +382,31 @@ app.post(
   formLimiter,
   async (req, res) => {
 
-const turnstileToken =
-  req.body["cf-turnstile-response"];
+if (!SKIP_TURNSTILE) {
 
-if (!turnstileToken) {
+  const turnstileToken =
+    req.body["cf-turnstile-response"];
 
-  console.warn(
-    "[BOT] Missing Turnstile token"
-  );
+  if (!turnstileToken) {
+    return res
+      .status(400)
+      .send("Verification failed");
+  }
 
-  return res
-    .status(400)
-    .send("Verification failed");
+  const verified =
+    await verifyTurnstile(
+      turnstileToken
+    );
 
+  if (!verified) {
+    return res
+      .status(400)
+      .send("Verification failed");
+  }
 }
 
-const verified =
-  await verifyTurnstile(
-    turnstileToken
-  );
-
-if (!verified) {
-
-  console.warn(
-    "[BOT] Turnstile failed"
-  );
-
-  return res
-    .status(400)
-    .send("Verification failed");
-
+if (!validateHumanSubmission(req, res)) {
+  return;
 }
 
   try {
@@ -411,6 +426,16 @@ if (!verified) {
     // Save contact data to MongoDB
     await contact.save();
 
+    console.log(
+      "Contact saved:",
+      contact._id
+    );
+
+    console.log(
+      "Contact document:",
+      contact
+    );
+
     emitEvent({
       event: "ContactFormSubmitted",
       timestamp: new Date().toISOString(),
@@ -420,31 +445,70 @@ if (!verified) {
         name: contact.name,
         email: contact.email,
         phone: contact.phone,
-        message: contact.message,
+
+        enquiryType:
+          contact.enquiryType,
+
+        condition:
+          contact.condition,
+
+        message:
+          contact.message,
       },
     });
 
     // Send email notification
-    const mailOptions = {
+    const html = await ejs.renderFile(
+      path.join(
+        __dirname,
+        "emails",
+        "contact-email.ejs"
+      ),
+      {
+        contact,
+        receivedAt:
+          new Date().toLocaleString(),
+        clinicName:
+          "Dr. Physio Clinic",
+        logoUrl:
+          "https://drphysioclinic.org/assets/logo.png"
+      }
+    );
+
+    await smtpTransporter.sendMail({
       from: process.env.SMTP_USER,
       to: process.env.SMTP_USER,
-      subject: 'New Contact Form Submission',
-      text: JSON.stringify(contactData, null, 2),
-    };
-
-    await smtpTransporter.sendMail(mailOptions);
+      subject:
+        `New Contact Form Submission - ${contact.name}`,
+      html
+    });
 
     // Log a success message
     console.log('Contact form submitted successfully');
 
-    // Read the HTML content from thankyou.html (assuming it's in the root directory)
-    const thankyouHtml = fs.readFileSync('./thankyou.html', 'utf8');
-
     // Send the HTML content as a response
-    res.send(thankyouHtml);
+    res.render('thankyou', {
+      name: contact.name,
+      pageTitle: 'Message Received',
+      message:
+        'Thank you for contacting Dr Physio Clinic. Our team will review your enquiry and get back to you as soon as possible.'
+    });
   } catch (error) {
-    console.error('Error submitting contact form:', error);
-    res.status(500).send('An error occurred while submitting the contact form.');
+
+    console.error(
+      "CONTACT ERROR:"
+    );
+
+    console.error(error);
+
+    console.error(
+      error.stack
+    );
+
+    res.status(500).send(
+      'An error occurred while submitting the contact form.'
+    );
+
   }
 });
 

@@ -1,173 +1,237 @@
-/* thankyou.css */
-
-@import url("https://fonts.googleapis.com/css2?family=Island+Moments&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&family=Satisfy&display=swap');
-
-:root {
-  --primary-color: #ff7e01;
-  --secondary-color: #faa935;
-  --heading-color: #0b2727;
-  --text-color: #6e7074;
-  --font-name: "Montserrat", sans-serif;
-  --subtitle-font-name: "Island Moments", cursive;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body{
+  font-family:
+    Inter,
+    Arial,
+    sans-serif;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #eef2f7
+    );
+
+  min-height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  padding:20px;
 }
 
-body {
-  font-family: var(--font-name);
-}
+.card {
+  width: 100%;
+  min-height: 100vh;
 
-section {
-  padding: 50px 0px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--heading-color);
-}
-
-a {
-  text-decoration: none;
-  color: unset;
-}
-
-.primary__btn {
-  background: var(--secondary-color) !important;
-  border: none !important;
-  border-radius: 50px !important;
-  padding: 0.4rem 1.5rem !important;
-}
-
-.primary__btn a {
-  font-size: 1.1rem;
-  text-decoration: none;
-  color: #fff;
-}
-
-.primary__btn a:hover {
-  color: inherit;
-}
-
-.secondary__btn {
-  background: transparent !important;
-  color: #0b2727 !important;
-  border: none !important;
-  font-weight: 500 !important;
-}
-
-.secondary__btn a {
-  text-decoration: none;
-  font-size: 1.1rem;
-  color: var(--heading-color);
-}
-
-.secondary__btn a:hover {
-  color: inherit;
-}
-
-.section__subtitle {
-  background: var(--secondary-color);
-  font-family: var(--subtitle-font-name);
-  width: max-content;
-  padding: 0px 0.5rem;
-  padding-right: 1rem;
-  border-radius: 50px;
-  font-weight: 500;
-  font-size: 1.7rem;
-  color: var(--heading-color);
-}
-
-@media only screen and (max-width: 992px) {
-  .primary__btn a,
-  .secondary__btn a {
-    font-size: 0.9rem;
-  }
-
-  .primary__btn,
-  .secondary__btn,
-  .btn-dark {
-    padding: 0.2rem 1.1rem !important;
-  }
-
-  section {
-    padding: 40px 0;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .section__subtitle {
-    font-size: 1.3rem;
-  }
-}
-
-/* Additional styles from thank-you.css can be added below */
-.thank__you span i{
-  font-size: 4rem;
-  color: green;
-
-}
-
-.thank__you h1{
-  font-size: 3.6rem;
-  font-family: var(--subtitle-font-name); 
-}
-/* thankyou.css */
-
-/* ... Your existing CSS rules ... */
-
-/* Add vertical spacing between elements */
-section {
-  padding: 50px 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+
+  background: #fff;
+}
+
+.hero {
+  min-height: 35vh;
+
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(
+    135deg,
+    #11998e,
+    #38ef7d
+  );
+
+  color: white;
+
+  padding: 60px 20px;
+}
+
+.logo{
+  width:125px;
+  margin-bottom:16px;
+}
+
+.hero h1{
+  font-size:2.2rem;
+  margin-bottom:10px;
+}
+
+.hero p{
+  opacity:.95;
+  line-height:1.6;
+}
+
+.content {
+  flex: 1;
+
+  max-width: 900px;
+  width: 100%;
+
+  margin: 0 auto;
+
+  padding: 60px 30px;
+
   text-align: center;
-  height: 100vh; /* Center vertically in the viewport */
 }
 
-.thank__you {
-  margin: 20px 0;
+.success-icon{
+  width:90px;
+  height:90px;
+
+  border-radius:50%;
+
+  background:#ecfdf5;
+
+  margin:0 auto 25px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.thank__you span i {
-  font-size: 4rem;
-  color: green;
-  margin-bottom: 20px; /* Add margin below the icon */
+.success-icon i{
+  font-size:3.5rem;
+  color:#16a34a;
 }
 
-.thank__you h1 {
-  font-size: 3.6rem;
-  font-family: var(--subtitle-font-name);
-  margin-bottom: 10px; /* Add margin below the heading */
+.content h2{
+  color:#0f172a;
+  margin-bottom:12px;
 }
 
-.thank__you h3 {
-  font-size: 2rem; /* Adjust font size as needed */
-  margin-bottom: 30px; /* Add margin below the subheading */
+.description{
+  color:#64748b;
+  line-height:1.8;
+  margin-bottom:24px;
 }
 
-.primary__btn {
-  margin-top: 20px; /* Add margin above the button */
+.info-box {
+  max-width: 700px;
+  margin: 30px auto;
 }
 
-/* Additional styles for smaller devices (<=480px) */
-@media only screen and (max-width: 480px) {
-  .container {
-    padding: 20px; /* Add padding to the container for smaller screens */
+.info-box{
+  text-align:left;
+
+  background:#f8fafc;
+
+  border:1px solid #e2e8f0;
+
+  border-radius:16px;
+
+  padding:20px;
+
+  margin-bottom:28px;
+}
+
+.info-box h3{
+  color:#11998e;
+  margin-bottom:12px;
+}
+
+.info-box ul{
+  list-style:none;
+}
+
+.info-box li{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+
+  margin-bottom:12px;
+
+  color:#475569;
+}
+
+.info-box i{
+  color:#11998e;
+  margin-top:2px;
+}
+
+.btn{
+  display:inline-block;
+
+  padding:14px 30px;
+
+  border-radius:999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #11998e,
+      #38ef7d
+    );
+
+  color:white;
+
+  text-decoration:none;
+
+  font-weight:600;
+
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:
+    translateY(-2px);
+}
+
+.footer{
+  background:#0f172a;
+
+  text-align:center;
+
+  padding:24px;
+
+  color:#94a3b8;
+
+  font-size:.9rem;
+}
+
+.footer .clinic{
+  color:white;
+  font-weight:600;
+}
+
+.footer .agency{
+  color:#38ef7d;
+  font-weight:600;
+}
+
+.footer .divider{
+  width:60px;
+  height:2px;
+
+  margin:10px auto;
+
+  background:#334155;
+}
+
+@media(max-width:768px){
+
+  .hero{
+    padding:30px 20px;
   }
 
-  .thank__you {
-    text-align: center;
+  .content{
+    padding:30px 20px;
   }
+
+  .hero h1{
+    font-size:1.8rem;
+  }
+
+  .content h2{
+    font-size:1.5rem;
+  }
+
 }

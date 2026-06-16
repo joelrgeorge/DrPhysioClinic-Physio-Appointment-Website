@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+<%- include('./styles/email.css') %>
+</style>
+</head>
+
+<body>
+
+<div class="email-wrapper">
+
+  <div class="header">
+    <img
+      src="https://drphysioclinic.org/assets/logo.png"
+      class="logo"
+      alt="Dr Physio Clinic"
+    >
+
+    <h1>🏥 New Appointment Request</h1>
+
+    <p>
+      Dr. Physio Clinic • Kothanur, Bangalore
+    </p>
+  </div>
+
+  <div class="content">
+
+    <div class="alert">
+      A new appointment request has been received from the website.
+    </div>
+
+    <div class="card">
+      <h2>📋 Patient Details</h2>
+
+        <div class="row">
+          <span>Name: </span>
+          <strong><%= appointment.name %></strong>
+        </div>
+
+        <div class="row">
+          <span>Phone: </span>
+          <strong><%= appointment.phoneNumber %></strong>
+        </div>
+
+        <div class="row">
+          <span>Email: </span>
+          <strong><%= appointment.email %></strong>
+        </div>
+
+        <div class="row">
+          <span>Condition: </span>
+          <strong><%= appointment.condition %></strong>
+        </div>
+
+        <div class="row">
+          <span>Date: </span>
+          <strong><%= appointment.preferredDate %></strong>
+        </div>
+
+        <div class="row">
+          <span>Time: </span>
+          <strong><%= appointment.preferredTime %></strong>
+        </div>
+
+              
+        <div class="row">
+            <span>Treatment: </span>
+            <strong><%= appointment.treatment %></strong>
+        </div>
+    </div>
+
+    <div class="notes">
+      <h3>📝 Additional Notes: </h3>
+      <p><%= appointment.additionalNotes || "No notes provided" %></p>
+    </div>
+
+    <div class="cta-container">
+
+      <a
+        href="tel:<%= appointment.phoneNumber %>"
+        class="cta-button"
+      >
+        📞 Call Patient Now
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+
+    <p>
+      Website & Automation System by
+    </p>
+
+    <h3>Liege Technologies</h3>
+
+    <p>
+      Custom Websites • Automations • AI Solutions
+    </p>
+
+  </div>
+
+</div>
+
+</body>
+</html>
